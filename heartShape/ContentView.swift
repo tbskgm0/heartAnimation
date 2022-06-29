@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var angle: Double = 0
+    @State var isAnimation = false
+    
     @State var to: CGFloat = 0
     
     @State var position: Position = .zero
@@ -31,6 +34,30 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
+            ZStack(alignment: .bottomTrailing) {
+                HeartShape()
+                    .stroke(Color.red,
+                                  style: StrokeStyle(
+                                    lineWidth: 5,
+                                    lineCap: .round))
+                    .frame(width: 120, height: 110)
+                
+                Rectangle()
+                    .fill(Color.white)
+//                    .border(Color.blue, width: 1)
+                    .frame(width: 120/2, height: 110/2)
+                    .rotationEffect(Angle(degrees: isAnimation ? 360 : 0),
+                                    anchor: .topLeading)
+                    .onAppear() {
+                        withAnimation(
+                            Animation
+                                .linear(duration: 2)
+                                .repeatForever(autoreverses: false)) {
+                                    isAnimation.toggle()
+                                }
+                    }
+            }
+            
             HeartShape()
                 .trim(from: 0, to: to)
                 .stroke(Color.red,
